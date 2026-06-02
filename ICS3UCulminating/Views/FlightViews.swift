@@ -132,7 +132,7 @@ struct FlightInputView: View {
                     if vm.flightNumber.isEmpty {
                         vm.flightNumber = "OZ4847"
                     }
-                    vm.currentStep = .flightInfo
+                    vm.currentStep = .congratulations
                 }) {
                     Text("Skip")
                         .fontWeight(.semibold)
