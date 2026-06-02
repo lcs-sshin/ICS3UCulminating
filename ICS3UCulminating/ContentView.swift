@@ -1,21 +1,25 @@
-//
-//  ContentView.swift
-//  ICS3UCulminating
-//
-//  Created by zimmer_h on 6/1/26.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    // MARK: - Stored properties
+    
+    @State private var appModel = AppModel()
+    @State private var showIntro = true
+    
+    // MARK: - body
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Group {
+            if showIntro {
+                IntroView {
+                    showIntro = false
+                }
+            } else {
+                NavigationStack {
+                    HomeView(appModel: appModel)
+                }
+            }
         }
-        .padding()
     }
 }
 
