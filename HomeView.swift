@@ -29,16 +29,16 @@ struct HomeView: View {
         .listStyle(PlainListStyle())
         .navigationTitle("My Flights")
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                NavigationLink(destination: MemoryView(appModel: appModel)) {
-                    Image(systemName: "clock.arrow.circlepath")
-                }
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .primaryAction) {
                 Button(action: {
                     showingAddFlight = true
                 }) {
                     Image(systemName: "plus")
+                }
+            }
+            ToolbarItem(placement: .navigation) {
+                NavigationLink(destination: MemoryView(appModel: appModel)) {
+                    Image(systemName: "clock.arrow.circlepath")
                 }
             }
         }

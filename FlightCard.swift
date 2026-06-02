@@ -43,7 +43,7 @@ struct FlightCard: View {
             }
         }
         .padding()
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color.secondary.opacity(0.1))
         .cornerRadius(12)
     }
     

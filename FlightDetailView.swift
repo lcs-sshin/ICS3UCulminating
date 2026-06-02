@@ -52,7 +52,7 @@ struct FlightDetailView: View {
                     }
                 }
                 .padding()
-                .background(Color(UIColor.secondarySystemBackground))
+                .background(Color.secondary.opacity(0.1))
                 .cornerRadius(16)
                 .padding(.horizontal)
                 
@@ -99,7 +99,6 @@ struct FlightDetailView: View {
             .padding(.vertical)
         }
         .navigationTitle("Details")
-        .navigationBarTitleDisplayMode(.inline)
     }
     
     // MARK: - Functions
@@ -127,7 +126,7 @@ struct DetailBox: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color.secondary.opacity(0.1))
         .cornerRadius(12)
     }
 }

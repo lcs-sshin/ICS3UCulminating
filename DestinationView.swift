@@ -20,7 +20,7 @@ struct DestinationView: View {
                     InfoRow(icon: "info.bubble.fill", label: "Currency", value: "Local Currency")
                 }
                 .padding()
-                .background(Color(UIColor.secondarySystemBackground))
+                .background(Color.secondary.opacity(0.1))
                 .cornerRadius(16)
                 .padding(.horizontal)
                 

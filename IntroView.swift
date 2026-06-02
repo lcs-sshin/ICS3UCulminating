@@ -30,7 +30,7 @@ struct IntroView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(UIColor.systemBackground))
+        .background(Color.clear)
     }
 }
 
