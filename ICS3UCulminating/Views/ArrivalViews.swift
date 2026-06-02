@@ -9,6 +9,7 @@ struct ArrivalInfoView: View {
             Text("Welcome to Toronto")
                 .font(.title2)
                 .fontWeight(.bold)
+                .foregroundColor(.black)
             
             VStack(spacing: 15) {
                 HStack {
@@ -21,6 +22,7 @@ struct ArrivalInfoView: View {
                 }
             }
             .font(.headline)
+            .foregroundColor(.black)
             
             Button(action: {
                 vm.currentStep = .busInfo
@@ -57,6 +59,17 @@ struct ArrivalInfoView: View {
     }
 }
 
+#Preview {
+    NavigationStack {
+        ZStack {
+            Color(white: 0.95).ignoresSafeArea()
+            ArrivalInfoView(vm: AirguideViewModel())
+                .padding()
+        }
+    }
+    .frame(width: 393, height: 852)
+}
+
 // MARK: - BusInfoView
 struct BusInfoView: View {
     var vm: AirguideViewModel
@@ -74,6 +87,7 @@ struct BusInfoView: View {
                 Spacer()
                 Text("Bus Schedule")
                     .font(.headline)
+                    .foregroundColor(.black)
                 Spacer()
                 // Empty view to balance the back button
                 Image(systemName: "chevron.left").opacity(0)
@@ -134,6 +148,7 @@ struct CongratulationsView: View {
             Text("Journey Complete")
                 .font(.title2)
                 .fontWeight(.bold)
+                .foregroundColor(.black)
             
             Text("Your flight data has been saved to your memories.")
                 .font(.subheadline)
@@ -183,6 +198,7 @@ struct PastJourniesView: View {
                 Spacer()
                 Text("Past Memories")
                     .font(.headline)
+                    .foregroundColor(.black)
                 Spacer()
                 Image(systemName: "chevron.left").opacity(0)
             }
@@ -193,6 +209,7 @@ struct PastJourniesView: View {
                         VStack(alignment: .leading, spacing: 5) {
                             Text(journey.route)
                                 .font(.headline)
+                                .foregroundColor(.black)
                             Text("\(journey.date) • \(journey.flightNumber)")
                                 .font(.caption)
                                 .foregroundColor(.gray)

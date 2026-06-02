@@ -10,25 +10,42 @@ struct IntroView: View {
                 .font(.system(size: 80))
                 .foregroundColor(.blue)
             
-            Text("Welcome Aboard Airguide")
-                .font(.title)
-                .fontWeight(.bold)
-                .multilineTextAlignment(.center)
+            VStack(spacing: 5) {
+                Text("Welcome to")
+                    .font(.title3)
+                    .foregroundColor(.gray)
+                Text("Airguide")
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                    .foregroundColor(.gray)
+            }
+            .padding(.bottom, 10)
+            .multilineTextAlignment(.center)
             
             Button(action: {
                 vm.currentStep = .login
             }) {
                 Text("Start Journey")
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
+                    .fontWeight(.bold)
+                    .foregroundColor(.gray)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(Color(white: 0.95))
                     .cornerRadius(15)
             }
         }
         .onboardingCard()
     }
+}
+
+#Preview {
+    NavigationStack {
+        ZStack {
+            Color(white: 0.95).ignoresSafeArea()
+            IntroView(vm: AirguideViewModel())
+                .padding()
+        }
+    }
+    .frame(width: 393, height: 852)
 }
 
 // MARK: - LoginView
@@ -51,6 +68,7 @@ struct LoginView: View {
             Text("Your Credentials")
                 .font(.title2)
                 .fontWeight(.bold)
+                .foregroundColor(.black)
             
             VStack(alignment: .leading, spacing: 10) {
                 Text("Email Address")
@@ -58,6 +76,7 @@ struct LoginView: View {
                     .foregroundColor(.gray)
                 TextField("Enter email", text: Binding(get: { vm.email }, set: { vm.email = $0 }))
                     .padding(.bottom, 5)
+                    .foregroundColor(.black)
                     .overlay(Rectangle().frame(height: 1).foregroundColor(.blue), alignment: .bottom)
             }
             
@@ -67,6 +86,7 @@ struct LoginView: View {
                     .foregroundColor(.gray)
                 TextField("Enter phone", text: Binding(get: { vm.phone }, set: { vm.phone = $0 }))
                     .padding(.bottom, 5)
+                    .foregroundColor(.black)
                     .overlay(Rectangle().frame(height: 1).foregroundColor(.blue), alignment: .bottom)
             }
             
@@ -95,6 +115,7 @@ struct FlightInputView: View {
             Text("Flight Selection")
                 .font(.title2)
                 .fontWeight(.bold)
+                .foregroundColor(.black)
             
             VStack(alignment: .leading, spacing: 10) {
                 Text("Flight Number")
@@ -102,6 +123,7 @@ struct FlightInputView: View {
                     .foregroundColor(.gray)
                 TextField("ex. OZ4847", text: Binding(get: { vm.flightNumber }, set: { vm.flightNumber = $0 }))
                     .padding(.bottom, 5)
+                    .foregroundColor(.black)
                     .overlay(Rectangle().frame(height: 1).foregroundColor(.blue), alignment: .bottom)
             }
             
@@ -148,6 +170,7 @@ struct FlightInfoView: View {
             Text("Flight Details")
                 .font(.title2)
                 .fontWeight(.bold)
+                .foregroundColor(.black)
             
             Group {
                 InfoDetailRow(label: "Flight Number", value: vm.flightNumber.isEmpty ? "OZ4847" : vm.flightNumber)
@@ -189,6 +212,7 @@ struct InfoDetailRow: View {
             Text(value)
                 .font(.body)
                 .fontWeight(.semibold)
+                .foregroundColor(.black)
         }
     }
 }

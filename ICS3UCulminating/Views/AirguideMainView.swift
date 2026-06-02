@@ -60,4 +60,5 @@ extension View {
 
 #Preview {
     AirguideMainView()
+        .frame(width: 393, height: 852)
 }
