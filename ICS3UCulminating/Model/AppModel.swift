@@ -13,10 +13,10 @@ class AppModel {
     init() {
         // Add some mock data for development
         let mockFlight1 = Flight(
-            flightNumber: "AC123",
-            airline: "Air Canada",
+            flightNumber: "OZ480",
+            airline: "Korean Air",
             origin: "YYZ",
-            destination: "LHR",
+            destination: "ICN",
             departureTime: Date(),
             arrivalTime: Date().addingTimeInterval(28800),
             status: "On Time",

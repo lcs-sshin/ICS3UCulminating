@@ -23,7 +23,7 @@ struct MemoryView: View {
                 }
             }
         }
-        .listStyle(PlainListStyle())
+        .listStyle(.automatic)
         .navigationTitle("Memory")
     }
 }

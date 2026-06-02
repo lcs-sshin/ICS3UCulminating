@@ -52,7 +52,7 @@ struct FlightDetailView: View {
                     }
                 }
                 .padding()
-                .background(Color.secondary.opacity(0.1))
+                .background(Color(white: 0.95))
                 .cornerRadius(16)
                 .padding(.horizontal)
                 
@@ -126,7 +126,7 @@ struct DetailBox: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(Color.secondary.opacity(0.1))
+        .background(Color(white: 0.95))
         .cornerRadius(12)
     }
 }
