@@ -33,6 +33,7 @@ struct AirguideMainView: View {
                         PastJourniesView(vm: vm)
                     }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding()
                 .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
                 .animation(.spring(), value: vm.currentStep)
@@ -60,5 +61,5 @@ extension View {
 
 #Preview {
     AirguideMainView()
-        .frame(width: 393, height: 852)
+        .frame(width: 350, height: 650)
 }

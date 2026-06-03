@@ -6,6 +6,20 @@ struct ArrivalInfoView: View {
     
     var body: some View {
         VStack(spacing: 30) {
+            HStack {
+                Button(action: {
+                    vm.currentStep = .flightInfo
+                }) {
+                    Image(systemName: "chevron.left")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                }
+                Spacer()
+                // Empty to balance the left button
+                Image(systemName: "chevron.left").opacity(0)
+            }
+            .padding(.bottom, -20)
+            
             Text("Welcome to Toronto")
                 .font(.title2)
                 .fontWeight(.bold)
@@ -157,6 +171,14 @@ struct CongratulationsView: View {
             
             VStack(spacing: 15) {
                 Button(action: {
+                    vm.currentStep = .arrivalInfo
+                }) {
+                    Text("Go Back")
+                        .fontWeight(.bold)
+                        .foregroundColor(.blue)
+                }
+                
+                Button(action: {
                     vm.resetFlightEntry()
                 }) {
                     Text("Enter New Flight")
@@ -200,7 +222,13 @@ struct PastJourniesView: View {
                     .font(.headline)
                     .foregroundColor(.black)
                 Spacer()
-                Image(systemName: "chevron.left").opacity(0)
+                Button(action: {
+                    vm.currentStep = .intro
+                }) {
+                    Image(systemName: "house.fill")
+                        .font(.title3)
+                        .foregroundColor(.blue)
+                }
             }
             
             List {

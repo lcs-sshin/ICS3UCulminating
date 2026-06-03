@@ -50,7 +50,7 @@ struct IntroView: View {
 
 // MARK: - LoginView
 struct LoginView: View {
-    var vm: AirguideViewModel
+    @Bindable var vm: AirguideViewModel
     
     var body: some View {
         VStack(spacing: 25) {
@@ -74,7 +74,7 @@ struct LoginView: View {
                 Text("Email Address")
                     .font(.caption)
                     .foregroundColor(.gray)
-                TextField("Enter email", text: Binding(get: { vm.email }, set: { vm.email = $0 }))
+                TextField("Enter email", text: $vm.email)
                     .padding(.bottom, 5)
                     .foregroundColor(.black)
                     .overlay(Rectangle().frame(height: 1).foregroundColor(.blue), alignment: .bottom)
@@ -84,7 +84,7 @@ struct LoginView: View {
                 Text("Phone Number")
                     .font(.caption)
                     .foregroundColor(.gray)
-                TextField("Enter phone", text: Binding(get: { vm.phone }, set: { vm.phone = $0 }))
+                TextField("Enter phone", text: $vm.phone)
                     .padding(.bottom, 5)
                     .foregroundColor(.black)
                     .overlay(Rectangle().frame(height: 1).foregroundColor(.blue), alignment: .bottom)
@@ -108,7 +108,7 @@ struct LoginView: View {
 
 // MARK: - FlightInputView
 struct FlightInputView: View {
-    var vm: AirguideViewModel
+    @Bindable var vm: AirguideViewModel
     
     var body: some View {
         VStack(spacing: 25) {
@@ -121,7 +121,7 @@ struct FlightInputView: View {
                 Text("Flight Number")
                     .font(.caption)
                     .foregroundColor(.gray)
-                TextField("ex. OZ4847", text: Binding(get: { vm.flightNumber }, set: { vm.flightNumber = $0 }))
+                TextField("ex. OZ4847", text: $vm.flightNumber)
                     .padding(.bottom, 5)
                     .foregroundColor(.black)
                     .overlay(Rectangle().frame(height: 1).foregroundColor(.blue), alignment: .bottom)
@@ -144,6 +144,9 @@ struct FlightInputView: View {
                 }
                 
                 Button(action: {
+                    if vm.flightNumber.isEmpty {
+                        vm.flightNumber = "OZ4847"
+                    }
                     vm.currentStep = .flightInfo
                 }) {
                     Text("Submit")
@@ -154,7 +157,6 @@ struct FlightInputView: View {
                         .background(Color.blue)
                         .cornerRadius(15)
                 }
-                .disabled(vm.flightNumber.isEmpty)
             }
         }
         .onboardingCard()
