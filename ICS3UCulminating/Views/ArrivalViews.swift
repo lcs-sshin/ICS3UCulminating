@@ -179,6 +179,14 @@ struct CongratulationsView: View {
                 }
                 
                 Button(action: {
+                    vm.currentStep = .logFlight
+                }) {
+                    Text("Log Flight >")
+                        .fontWeight(.bold)
+                        .foregroundColor(.blue)
+                }
+                
+                Button(action: {
                     vm.resetFlightEntry()
                 }) {
                     Text("Enter New Flight")
@@ -197,6 +205,92 @@ struct CongratulationsView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.blue)
                 }
+            }
+        }
+        .onboardingCard()
+    }
+}
+
+// MARK: - LogFlightView
+struct LogFlightView: View {
+    @Bindable var vm: AirguideViewModel
+    @State private var notes: String = ""
+    
+    var body: some View {
+        VStack(spacing: 25) {
+            HStack {
+                Button(action: {
+                    vm.currentStep = .congratulations
+                }) {
+                    Image(systemName: "chevron.left")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.blue)
+                }
+                Spacer()
+                Text("Log Memories")
+                    .font(.headline)
+                    .foregroundColor(.black)
+                Spacer()
+                Image(systemName: "chevron.left").opacity(0)
+            }
+            
+            VStack(alignment: .leading, spacing: 15) {
+                Text("Capture Your Trip")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundColor(.black)
+                
+                Text("Add photos and notes about your flight \(vm.flightNumber.isEmpty ? "OZ4847" : vm.flightNumber).")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                
+                // Photo Placeholder Area
+                Button(action: {
+                    // Action for adding pictures
+                }) {
+                    VStack(spacing: 12) {
+                        Image(systemName: "camera.fill")
+                            .font(.largeTitle)
+                        Text("Add Pictures")
+                            .fontWeight(.semibold)
+                    }
+                    .foregroundColor(.blue)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 150)
+                    .background(Color.blue.opacity(0.1))
+                    .cornerRadius(20)
+                }
+                
+                // Notes Area
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("How was the travel?")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .fontWeight(.bold)
+                    
+                    TextEditor(text: $notes)
+                        .frame(height: 100)
+                        .padding(10)
+                        .background(Color(white: 0.95))
+                        .cornerRadius(12)
+                        .foregroundColor(.black)
+                }
+            }
+            
+            Spacer()
+            
+            Button(action: {
+                // In a real app, we'd save the notes/photos to the FlightRecord
+                vm.currentStep = .pastJournies
+            }) {
+                Text("Save to Memories")
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(15)
             }
         }
         .onboardingCard()

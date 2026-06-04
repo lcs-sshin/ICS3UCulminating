@@ -29,6 +29,8 @@ struct AirguideMainView: View {
                         BusInfoView(vm: vm)
                     case .congratulations:
                         CongratulationsView(vm: vm)
+                    case .logFlight:
+                        LogFlightView(vm: vm)
                     case .pastJournies:
                         PastJourniesView(vm: vm)
                     }

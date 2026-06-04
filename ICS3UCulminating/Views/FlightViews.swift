@@ -73,20 +73,20 @@ struct LoginView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Email Address")
                     .font(.caption)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.white)
                 TextField("Enter email", text: $vm.email)
                     .padding(.bottom, 5)
-                    .foregroundColor(.black)
+                    .foregroundColor(.gray)
                     .overlay(Rectangle().frame(height: 1).foregroundColor(.blue), alignment: .bottom)
             }
             
             VStack(alignment: .leading, spacing: 10) {
                 Text("Phone Number")
                     .font(.caption)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.white)
                 TextField("Enter phone", text: $vm.phone)
                     .padding(.bottom, 5)
-                    .foregroundColor(.black)
+                    .foregroundColor(.gray)
                     .overlay(Rectangle().frame(height: 1).foregroundColor(.blue), alignment: .bottom)
             }
             
