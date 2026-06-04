@@ -11,6 +11,7 @@ class AirguideViewModel {
         case flightInfo
         case arrivalInfo
         case busInfo
+        case taxiInfo
         case congratulations
         case logFlight
         case pastJournies

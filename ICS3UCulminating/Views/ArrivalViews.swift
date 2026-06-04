@@ -53,6 +53,21 @@ struct ArrivalInfoView: View {
                 .cornerRadius(15)
             }
             
+            Button(action: {
+                vm.currentStep = .taxiInfo
+            }) {
+                HStack {
+                    Image(systemName: "car.fill")
+                    Text("Take a taxi / Uber")
+                }
+                .fontWeight(.semibold)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.black)
+                .cornerRadius(15)
+            }
+            
             Spacer()
             
             Button(action: {
@@ -143,6 +158,100 @@ struct BusInfoView: View {
                         .cornerRadius(15)
                     }
                 }
+            }
+        }
+        .onboardingCard()
+    }
+}
+
+// MARK: - TaxiInfoView
+struct TaxiInfoView: View {
+    var vm: AirguideViewModel
+    @Environment(\.openURL) var openURL
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 25) {
+            HStack {
+                Button(action: {
+                    vm.currentStep = .arrivalInfo
+                }) {
+                    Image(systemName: "chevron.left")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.blue)
+                }
+                Spacer()
+                Text("Taxi & Rideshare")
+                    .font(.headline)
+                    .foregroundColor(.black)
+                Spacer()
+                Image(systemName: "chevron.left").opacity(0)
+            }
+            
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Need a ride?")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundColor(.black)
+                
+                Text("Download a rideshare app or head to the taxi stand outside Terminal 3.")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
+            
+            VStack(spacing: 15) {
+                // Uber Button
+                Button(action: {
+                    if let url = URL(string: "https://apps.apple.com/app/uber/id364892933") {
+                        openURL(url)
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: "arrow.down.circle.fill")
+                        Text("Download Uber")
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                    }
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.black)
+                    .cornerRadius(15)
+                }
+                
+                // Lyft Button
+                Button(action: {
+                    if let url = URL(string: "https://apps.apple.com/app/lyft/id529392153") {
+                        openURL(url)
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: "arrow.down.circle.fill")
+                        Text("Download Lyft")
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                    }
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.pink)
+                    .cornerRadius(15)
+                }
+            }
+            
+            Spacer()
+            
+            Button(action: {
+                vm.addNewJourney()
+                vm.currentStep = .congratulations
+            }) {
+                Text("I've found my ride")
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.green)
+                    .cornerRadius(15)
             }
         }
         .onboardingCard()
