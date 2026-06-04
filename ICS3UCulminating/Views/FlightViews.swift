@@ -176,7 +176,7 @@ struct FlightInfoView: View {
             
             Group {
                 InfoDetailRow(label: "Flight Number", value: vm.flightNumber.isEmpty ? "OZ4847" : vm.flightNumber)
-                InfoDetailRow(label: "Date", value: "June 2, 2026")
+                InfoDetailRow(label: "Date", value: "June 11, 2026")
                 InfoDetailRow(label: "Route", value: "Incheon (ICN) -> Toronto (YYZ)")
                 InfoDetailRow(label: "Departure", value: "10:30 AM")
                 InfoDetailRow(label: "Terminal", value: "1")
