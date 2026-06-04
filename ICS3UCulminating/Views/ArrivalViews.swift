@@ -425,13 +425,8 @@ struct PastJourniesView: View {
                     .font(.headline)
                     .foregroundColor(.black)
                 Spacer()
-                Button(action: {
-                    vm.currentStep = .intro
-                }) {
-                    Image(systemName: "house.fill")
-                        .font(.title3)
-                        .foregroundColor(.blue)
-                }
+                // Balanced spacer for the layout, home button is handled by wrapper
+                Image(systemName: "house.fill").opacity(0)
             }
             
             List {

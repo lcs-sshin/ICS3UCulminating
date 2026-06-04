@@ -37,6 +37,7 @@ struct AirguideMainView: View {
                         PastJourniesView(vm: vm)
                     }
                 }
+                .withHomeButton(vm: vm)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding()
                 .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
@@ -60,6 +61,23 @@ struct OnboardingCardStyle: ViewModifier {
 extension View {
     func onboardingCard() -> some View {
         self.modifier(OnboardingCardStyle())
+    }
+    
+    func withHomeButton(vm: AirguideViewModel) -> some View {
+        ZStack(alignment: .topTrailing) {
+            self
+            
+            if vm.currentStep != .intro {
+                Button(action: {
+                    vm.currentStep = .intro
+                }) {
+                    Image(systemName: "house.fill")
+                        .font(.title3)
+                        .foregroundColor(Color(white: 0.3)) // Dark Gray
+                        .padding(25)
+                }
+            }
+        }
     }
 }
 

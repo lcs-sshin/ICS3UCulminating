@@ -55,7 +55,6 @@ struct LoginView: View {
     var body: some View {
         VStack(spacing: 25) {
             HStack {
-                Spacer()
                 Button(action: {
                     vm.currentStep = .intro
                 }) {
@@ -63,9 +62,10 @@ struct LoginView: View {
                         .font(.title2)
                         .foregroundColor(.gray)
                 }
+                Spacer()
             }
             
-            Text("Your Credentials")
+            Text("Login information")
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.black)
@@ -73,20 +73,20 @@ struct LoginView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Email Address")
                     .font(.caption)
-                    .foregroundColor(.white)
+                    .foregroundColor(.gray)
                 TextField("Enter email", text: $vm.email)
                     .padding(.bottom, 5)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.black)
                     .overlay(Rectangle().frame(height: 1).foregroundColor(.blue), alignment: .bottom)
             }
             
             VStack(alignment: .leading, spacing: 10) {
                 Text("Phone Number")
                     .font(.caption)
-                    .foregroundColor(.white)
+                    .foregroundColor(.gray)
                 TextField("Enter phone", text: $vm.phone)
                     .padding(.bottom, 5)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.black)
                     .overlay(Rectangle().frame(height: 1).foregroundColor(.blue), alignment: .bottom)
             }
             
