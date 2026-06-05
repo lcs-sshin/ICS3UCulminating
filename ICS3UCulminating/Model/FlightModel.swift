@@ -7,7 +7,8 @@ struct FlightRecord: Identifiable {
     var date: String
     var flightNumber: String
     var terminal: String
-    var frame: String = "" // Added as requested in prompt requirements
+    var status: String = "On Time" // Added status property
+    var frame: String = ""
 }
 
 // MARK: - BusInfo Model

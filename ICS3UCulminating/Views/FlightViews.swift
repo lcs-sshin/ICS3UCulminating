@@ -182,6 +182,7 @@ struct FlightInfoView: View {
                 InfoDetailRow(label: "Terminal", value: "1")
                 InfoDetailRow(label: "Gate", value: "22")
                 InfoDetailRow(label: "Seat", value: "14A")
+                InfoDetailRow(label: "Delayed Status", value: vm.currentFlightStatus, color: vm.currentFlightStatus == "On Time" ? .green : .red)
             }
             
             Spacer()
@@ -205,6 +206,7 @@ struct FlightInfoView: View {
 struct InfoDetailRow: View {
     var label: String
     var value: String
+    var color: Color = .black
     
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
@@ -214,7 +216,7 @@ struct InfoDetailRow: View {
             Text(value)
                 .font(.body)
                 .fontWeight(.semibold)
-                .foregroundColor(.black)
+                .foregroundColor(color)
         }
     }
 }

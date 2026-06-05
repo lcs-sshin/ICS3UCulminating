@@ -62,7 +62,7 @@ extension View {
     func onboardingCard() -> some View {
         self.modifier(OnboardingCardStyle())
     }
-    
+ 
     func withHomeButton(vm: AirguideViewModel) -> some View {
         ZStack(alignment: .topTrailing) {
             self

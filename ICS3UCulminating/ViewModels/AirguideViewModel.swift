@@ -24,6 +24,7 @@ class AirguideViewModel {
     var email: String = ""
     var phone: String = ""
     var flightNumber: String = ""
+    var currentFlightStatus: String = "On Time" // Added property to track status
     
     // Dynamic Data
     var pastJournies: [FlightRecord] = []
@@ -87,7 +88,8 @@ class AirguideViewModel {
             route: "Toronto -> Incheon",
             date: "Current Date",
             flightNumber: actualFlightNumber,
-            terminal: "2"
+            terminal: "2",
+            status: currentFlightStatus
         )
         
         // Insert at the beginning of the array as requested
