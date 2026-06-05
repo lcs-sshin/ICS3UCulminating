@@ -117,4 +117,17 @@ class AirguideViewModel {
         selectedJourney = journey
         currentStep = .memoryDetail
     }
+    
+    func updateMemoryNotes(id: UUID, newNotes: String) {
+        for index in 0..<pastJournies.count {
+            if pastJournies[index].id == id {
+                pastJournies[index].notes = newNotes
+                // Also update the selected journey if it's currently being viewed
+                if selectedJourney?.id == id {
+                    selectedJourney?.notes = newNotes
+                }
+                break
+            }
+        }
+    }
 }

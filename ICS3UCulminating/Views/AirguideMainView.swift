@@ -9,7 +9,7 @@ struct AirguideMainView: View {
         NavigationStack {
             ZStack {
                 // Application Background
-                Color(white: 0.95)
+                Color.white
                     .ignoresSafeArea()
                 
                 // Dynamic View Switching
@@ -39,11 +39,32 @@ struct AirguideMainView: View {
                         MemoryDetailView(vm: vm)
                     }
                 }
-                .withHomeButton(vm: vm)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding()
                 .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
                 .animation(.spring(), value: vm.currentStep)
+                
+                // UNIVERSAL HOME BUTTON (Outer Layer - Minimalist)
+                if vm.currentStep != .intro {
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                withAnimation {
+                                    vm.currentStep = .intro
+                                }
+                            }) {
+                                Image(systemName: "house.fill")
+                                    .font(.title3)
+                                    .foregroundColor(Color(white: 0.3)) // Dark Gray
+                                    .padding(15)
+                            }
+                            .padding(.top, 10)
+                            .padding(.trailing, 10)
+                        }
+                        Spacer()
+                    }
+                }
             }
         }
     }
@@ -63,23 +84,6 @@ struct OnboardingCardStyle: ViewModifier {
 extension View {
     func onboardingCard() -> some View {
         self.modifier(OnboardingCardStyle())
-    }
- 
-    func withHomeButton(vm: AirguideViewModel) -> some View {
-        ZStack(alignment: .topTrailing) {
-            self
-            
-            if vm.currentStep != .intro {
-                Button(action: {
-                    vm.currentStep = .intro
-                }) {
-                    Image(systemName: "house.fill")
-                        .font(.title3)
-                        .foregroundColor(Color(white: 0.3)) // Dark Gray
-                        .padding(25)
-                }
-            }
-        }
     }
 }
 

@@ -6,6 +6,19 @@ struct IntroView: View {
     
     var body: some View {
         VStack(spacing: 30) {
+            HStack {
+                Spacer()
+                Button(action: {
+                    vm.currentStep = .pastJournies
+                }) {
+                    Image(systemName: "clock.arrow.circlepath")
+                        .font(.title2)
+                        .foregroundColor(.gray)
+                }
+            }
+            .padding(.top, -10)
+            .padding(.trailing, -10)
+            
             Image(systemName: "airplane")
                 .font(.system(size: 80))
                 .foregroundColor(.blue)

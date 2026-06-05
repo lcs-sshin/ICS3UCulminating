@@ -453,7 +453,7 @@ struct PastJourniesView: View {
                             
                             // Placeholder for memory thumbnail
                             Rectangle()
-                                .fill(Color(white: 0.9))
+                                .fill(Color(white: 0.98))
                                 .frame(width: 50, height: 50)
                                 .cornerRadius(8)
                                 .overlay(
@@ -463,10 +463,13 @@ struct PastJourniesView: View {
                                 )
                         }
                     }
+                    .listRowBackground(Color.white)
                     .padding(.vertical, 8)
                 }
             }
             .listStyle(PlainListStyle())
+            .scrollContentBackground(.hidden)
+            .background(Color.white)
             .cornerRadius(20)
         }
         .onboardingCard()
@@ -475,26 +478,45 @@ struct PastJourniesView: View {
 
 // MARK: - MemoryDetailView
 struct MemoryDetailView: View {
-    var vm: AirguideViewModel
+    @Bindable var vm: AirguideViewModel
+    @State private var isEditing: Bool = false
+    @State private var editableNotes: String = ""
     
     var body: some View {
         VStack(spacing: 25) {
             if let journey = vm.selectedJourney {
                 HStack {
                     Button(action: {
-                        vm.currentStep = .pastJournies
+                        if isEditing {
+                            isEditing = false
+                        } else {
+                            vm.currentStep = .pastJournies
+                        }
                     }) {
-                        Image(systemName: "chevron.left")
+                        Image(systemName: isEditing ? "xmark" : "chevron.left")
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(.blue)
                     }
                     Spacer()
-                    Text("Journey Details")
+                    Text(isEditing ? "Edit Journal" : "Journey Details")
                         .font(.headline)
                         .foregroundColor(.black)
                     Spacer()
-                    Image(systemName: "chevron.left").opacity(0)
+                    
+                    Button(action: {
+                        if isEditing {
+                            vm.updateMemoryNotes(id: journey.id, newNotes: editableNotes)
+                            isEditing = false
+                        } else {
+                            editableNotes = journey.notes
+                            isEditing = true
+                        }
+                    }) {
+                        Text(isEditing ? "Save" : "Edit")
+                            .fontWeight(.bold)
+                            .foregroundColor(.blue)
+                    }
                 }
                 
                 ScrollView {
@@ -510,25 +532,27 @@ struct MemoryDetailView: View {
                                 .foregroundColor(.gray)
                         }
                         
-                        // Image Placeholder
-                        Rectangle()
-                            .fill(Color.blue.opacity(0.05))
-                            .frame(height: 200)
-                            .cornerRadius(20)
-                            .overlay(
-                                VStack(spacing: 10) {
-                                    Image(systemName: "photo.on.rectangle.angled")
-                                        .font(.system(size: 40))
-                                    Text("Your Trip Photos")
-                                        .fontWeight(.semibold)
-                                }
-                                .foregroundColor(.blue.opacity(0.3))
-                            )
-                        
-                        // Quick Stats
-                        HStack {
-                            DetailMiniBox(label: "Terminal", value: journey.terminal)
-                            DetailMiniBox(label: "Status", value: journey.status, valueColor: journey.status == "On Time" ? .green : .red)
+                        if !isEditing {
+                            // Image Placeholder
+                            Rectangle()
+                                .fill(Color.blue.opacity(0.05))
+                                .frame(height: 200)
+                                .cornerRadius(20)
+                                .overlay(
+                                    VStack(spacing: 10) {
+                                        Image(systemName: "photo.on.rectangle.angled")
+                                            .font(.system(size: 40))
+                                        Text("Your Trip Photos")
+                                            .fontWeight(.semibold)
+                                    }
+                                    .foregroundColor(.blue.opacity(0.3))
+                                )
+                            
+                            // Quick Stats
+                            HStack {
+                                DetailMiniBox(label: "Terminal", value: journey.terminal)
+                                DetailMiniBox(label: "Status", value: journey.status, valueColor: journey.status == "On Time" ? .green : .red)
+                            }
                         }
                         
                         // Travel Notes
@@ -537,16 +561,31 @@ struct MemoryDetailView: View {
                                 .font(.headline)
                                 .foregroundColor(.black)
                             
-                            Text(journey.notes.isEmpty ? "No notes recorded for this journey." : journey.notes)
-                                .font(.body)
-                                .foregroundColor(.black)
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Color(white: 0.96))
-                                .cornerRadius(15)
+                            if isEditing {
+                                TextEditor(text: $editableNotes)
+                                    .frame(height: 200)
+                                    .padding(10)
+                                    .background(Color(white: 0.98))
+                                    .cornerRadius(15)
+                                    .foregroundColor(.black)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .stroke(Color.blue.opacity(0.2), lineWidth: 1)
+                                    )
+                            } else {
+                                Text(journey.notes.isEmpty ? "No notes recorded for this journey." : journey.notes)
+                                    .font(.body)
+                                    .foregroundColor(.black)
+                                    .padding()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .background(Color(white: 0.98))
+                                    .cornerRadius(15)
+                            }
                         }
                     }
                 }
+                .scrollContentBackground(.hidden)
+                .background(Color.white)
             } else {
                 Text("Select a journey to view details")
                     .foregroundColor(.gray)
@@ -572,7 +611,7 @@ struct DetailMiniBox: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(Color(white: 0.96))
+        .background(Color(white: 0.98))
         .cornerRadius(15)
     }
 }
@@ -580,7 +619,7 @@ struct DetailMiniBox: View {
 #Preview {
     NavigationStack {
         ZStack {
-            Color(white: 0.95).ignoresSafeArea()
+            Color.white.ignoresSafeArea()
             ArrivalInfoView(vm: AirguideViewModel())
                 .padding()
         }
