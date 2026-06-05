@@ -88,17 +88,6 @@ struct ArrivalInfoView: View {
     }
 }
 
-#Preview {
-    NavigationStack {
-        ZStack {
-            Color(white: 0.95).ignoresSafeArea()
-            ArrivalInfoView(vm: AirguideViewModel())
-                .padding()
-        }
-    }
-    .frame(width: 393, height: 852)
-}
-
 // MARK: - BusInfoView
 struct BusInfoView: View {
     var vm: AirguideViewModel
@@ -112,6 +101,7 @@ struct BusInfoView: View {
                     Image(systemName: "chevron.left")
                         .font(.title2)
                         .fontWeight(.bold)
+                        .foregroundColor(.blue)
                 }
                 Spacer()
                 Text("Bus Schedule")
@@ -285,6 +275,14 @@ struct CongratulationsView: View {
                     Text("Go Back")
                         .fontWeight(.bold)
                         .foregroundColor(.blue)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color(white: 0.92))
+                        .cornerRadius(15)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(Color.blue.opacity(0.2), lineWidth: 1)
+                        )
                 }
                 
                 Button(action: {
@@ -323,7 +321,6 @@ struct CongratulationsView: View {
 // MARK: - LogFlightView
 struct LogFlightView: View {
     @Bindable var vm: AirguideViewModel
-    @State private var notes: String = ""
     
     var body: some View {
         VStack(spacing: 25) {
@@ -378,7 +375,7 @@ struct LogFlightView: View {
                         .foregroundColor(.gray)
                         .fontWeight(.bold)
                     
-                    TextEditor(text: $notes)
+                    TextEditor(text: $vm.currentFlightNotes)
                         .frame(height: 100)
                         .padding(10)
                         .background(Color(white: 0.95))
@@ -390,7 +387,7 @@ struct LogFlightView: View {
             Spacer()
             
             Button(action: {
-                // In a real app, we'd save the notes/photos to the FlightRecord
+                vm.addNewJourney()
                 vm.currentStep = .pastJournies
             }) {
                 Text("Save to Memories")
@@ -419,6 +416,7 @@ struct PastJourniesView: View {
                     Image(systemName: "chevron.left")
                         .font(.title2)
                         .fontWeight(.bold)
+                        .foregroundColor(.blue)
                 }
                 Spacer()
                 Text("Past Memories")
@@ -431,34 +429,39 @@ struct PastJourniesView: View {
             
             List {
                 ForEach(vm.pastJournies) { journey in
-                    HStack(spacing: 15) {
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text(journey.route)
-                                .font(.headline)
-                                .foregroundColor(.black)
-                            Text("\(journey.date) • \(journey.flightNumber)")
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                            Text("Terminal \(journey.terminal)")
-                                .font(.caption2)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(Color.blue.opacity(0.1))
-                                .cornerRadius(4)
-                        }
-                        
-                        Spacer()
-                        
-                        // Placeholder for memory thumbnail
-                        Rectangle()
-                            .fill(Color(white: 0.9))
-                            .frame(width: 50, height: 50)
-                            .cornerRadius(8)
-                            .overlay(
-                                Image(systemName: "photo")
-                                    .font(.caption2)
+                    Button(action: {
+                        vm.viewMemory(journey)
+                    }) {
+                        HStack(spacing: 15) {
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(journey.route)
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                                Text("\(journey.date) • \(journey.flightNumber)")
+                                    .font(.caption)
                                     .foregroundColor(.gray)
-                            )
+                                Text("Terminal \(journey.terminal)")
+                                    .font(.caption2)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(Color.blue.opacity(0.1))
+                                    .cornerRadius(4)
+                                    .foregroundColor(.blue)
+                            }
+                            
+                            Spacer()
+                            
+                            // Placeholder for memory thumbnail
+                            Rectangle()
+                                .fill(Color(white: 0.9))
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(8)
+                                .overlay(
+                                    Image(systemName: "photo")
+                                        .font(.caption2)
+                                        .foregroundColor(.gray)
+                                )
+                        }
                     }
                     .padding(.vertical, 8)
                 }
@@ -468,4 +471,119 @@ struct PastJourniesView: View {
         }
         .onboardingCard()
     }
+}
+
+// MARK: - MemoryDetailView
+struct MemoryDetailView: View {
+    var vm: AirguideViewModel
+    
+    var body: some View {
+        VStack(spacing: 25) {
+            if let journey = vm.selectedJourney {
+                HStack {
+                    Button(action: {
+                        vm.currentStep = .pastJournies
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.blue)
+                    }
+                    Spacer()
+                    Text("Journey Details")
+                        .font(.headline)
+                        .foregroundColor(.black)
+                    Spacer()
+                    Image(systemName: "chevron.left").opacity(0)
+                }
+                
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        // Header
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(journey.route)
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .foregroundColor(.black)
+                            Text("\(journey.date) • Flight \(journey.flightNumber)")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                        
+                        // Image Placeholder
+                        Rectangle()
+                            .fill(Color.blue.opacity(0.05))
+                            .frame(height: 200)
+                            .cornerRadius(20)
+                            .overlay(
+                                VStack(spacing: 10) {
+                                    Image(systemName: "photo.on.rectangle.angled")
+                                        .font(.system(size: 40))
+                                    Text("Your Trip Photos")
+                                        .fontWeight(.semibold)
+                                }
+                                .foregroundColor(.blue.opacity(0.3))
+                            )
+                        
+                        // Quick Stats
+                        HStack {
+                            DetailMiniBox(label: "Terminal", value: journey.terminal)
+                            DetailMiniBox(label: "Status", value: journey.status, valueColor: journey.status == "On Time" ? .green : .red)
+                        }
+                        
+                        // Travel Notes
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Travel Journal")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                            
+                            Text(journey.notes.isEmpty ? "No notes recorded for this journey." : journey.notes)
+                                .font(.body)
+                                .foregroundColor(.black)
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(Color(white: 0.96))
+                                .cornerRadius(15)
+                        }
+                    }
+                }
+            } else {
+                Text("Select a journey to view details")
+                    .foregroundColor(.gray)
+            }
+        }
+        .onboardingCard()
+    }
+}
+
+struct DetailMiniBox: View {
+    var label: String
+    var value: String
+    var valueColor: Color = .black
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(label)
+                .font(.caption)
+                .foregroundColor(.gray)
+            Text(value)
+                .font(.headline)
+                .foregroundColor(valueColor)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(Color(white: 0.96))
+        .cornerRadius(15)
+    }
+}
+
+#Preview {
+    NavigationStack {
+        ZStack {
+            Color(white: 0.95).ignoresSafeArea()
+            ArrivalInfoView(vm: AirguideViewModel())
+                .padding()
+        }
+    }
+    .frame(width: 393, height: 852)
 }

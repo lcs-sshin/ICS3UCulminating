@@ -35,6 +35,8 @@ struct AirguideMainView: View {
                         LogFlightView(vm: vm)
                     case .pastJournies:
                         PastJourniesView(vm: vm)
+                    case .memoryDetail:
+                        MemoryDetailView(vm: vm)
                     }
                 }
                 .withHomeButton(vm: vm)

@@ -7,7 +7,8 @@ struct FlightRecord: Identifiable {
     var date: String
     var flightNumber: String
     var terminal: String
-    var status: String = "On Time" // Added status property
+    var status: String = "On Time"
+    var notes: String = "" // Added to store travel notes
     var frame: String = ""
 }
 

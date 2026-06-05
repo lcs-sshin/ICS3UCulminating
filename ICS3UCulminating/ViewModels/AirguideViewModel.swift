@@ -15,6 +15,7 @@ class AirguideViewModel {
         case congratulations
         case logFlight
         case pastJournies
+        case memoryDetail // New step for viewing specific journey details
     }
     
     // MARK: - Stored properties
@@ -24,11 +25,13 @@ class AirguideViewModel {
     var email: String = ""
     var phone: String = ""
     var flightNumber: String = ""
-    var currentFlightStatus: String = "On Time" // Added property to track status
+    var currentFlightStatus: String = "On Time"
+    var currentFlightNotes: String = "" // For logging memories
     
     // Dynamic Data
     var pastJournies: [FlightRecord] = []
     var busList: [BusInfo] = []
+    var selectedJourney: FlightRecord? // To track which memory is being viewed
     
     // MARK: - Initializer
     init() {
@@ -63,13 +66,17 @@ class AirguideViewModel {
             route: "Incheon -> Toronto",
             date: "Jan 4th 2026",
             flightNumber: "OZ4384",
-            terminal: "3"
+            terminal: "3",
+            status: "On Time",
+            notes: "Smooth flight, great service!"
         )
         let journey2 = FlightRecord(
             route: "Incheon -> Shanghai",
             date: "Dec 15th 2025",
             flightNumber: "MU5052",
-            terminal: "1"
+            terminal: "1",
+            status: "On Time",
+            notes: "Quick trip for business."
         )
         
         pastJournies.append(journey1)
@@ -89,15 +96,25 @@ class AirguideViewModel {
             date: "Current Date",
             flightNumber: actualFlightNumber,
             terminal: "2",
-            status: currentFlightStatus
+            status: currentFlightStatus,
+            notes: currentFlightNotes // Save the captured notes
         )
         
         // Insert at the beginning of the array as requested
         pastJournies.insert(newRecord, at: 0)
+        
+        // Reset notes for the next trip
+        currentFlightNotes = ""
     }
     
     func resetFlightEntry() {
         flightNumber = ""
+        currentFlightNotes = ""
         currentStep = .flightInput
+    }
+    
+    func viewMemory(_ journey: FlightRecord) {
+        selectedJourney = journey
+        currentStep = .memoryDetail
     }
 }
