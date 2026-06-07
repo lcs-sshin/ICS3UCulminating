@@ -405,13 +405,18 @@ struct LogFlightView: View {
 
 // MARK: - PastJourniesView
 struct PastJourniesView: View {
-    var vm: AirguideViewModel
+    @Bindable var vm: AirguideViewModel
+    @State private var showingManualEntry = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             HStack {
                 Button(action: {
-                    vm.currentStep = .congratulations
+                    if showingManualEntry {
+                        showingManualEntry = false
+                    } else {
+                        vm.currentStep = .congratulations
+                    }
                 }) {
                     Image(systemName: "chevron.left")
                         .font(.title2)
@@ -419,60 +424,183 @@ struct PastJourniesView: View {
                         .foregroundColor(.blue)
                 }
                 Spacer()
-                Text("Past Memories")
+                Text(showingManualEntry ? "New Memory" : "Past Memories")
                     .font(.headline)
                     .foregroundColor(.black)
                 Spacer()
-                // Balanced spacer for the layout, home button is handled by wrapper
-                Image(systemName: "house.fill").opacity(0)
-            }
-            
-            List {
-                ForEach(vm.pastJournies) { journey in
+                
+                if !showingManualEntry {
                     Button(action: {
-                        vm.viewMemory(journey)
+                        showingManualEntry = true
                     }) {
-                        HStack(spacing: 15) {
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text(journey.route)
-                                    .font(.headline)
-                                    .foregroundColor(.black)
-                                Text("\(journey.date) • \(journey.flightNumber)")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                Text("Terminal \(journey.terminal)")
-                                    .font(.caption2)
-                                    .padding(.horizontal, 6)
-                                    .padding(.vertical, 2)
-                                    .background(Color.blue.opacity(0.1))
-                                    .cornerRadius(4)
-                                    .foregroundColor(.blue)
-                            }
-                            
-                            Spacer()
-                            
-                            // Placeholder for memory thumbnail
-                            Rectangle()
-                                .fill(Color(white: 0.98))
-                                .frame(width: 50, height: 50)
-                                .cornerRadius(8)
-                                .overlay(
-                                    Image(systemName: "photo")
-                                        .font(.caption2)
-                                        .foregroundColor(.gray)
-                                )
-                        }
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(.blue)
                     }
-                    .listRowBackground(Color.white)
-                    .padding(.vertical, 8)
+                } else {
+                    // Placeholder to keep alignment
+                    Image(systemName: "plus.circle.fill").opacity(0)
                 }
             }
-            .listStyle(PlainListStyle())
-            .scrollContentBackground(.hidden)
-            .background(Color.white)
-            .cornerRadius(20)
+            
+            if showingManualEntry {
+                ManualFlightEntryView(vm: vm, onSave: {
+                    showingManualEntry = false
+                })
+            } else {
+                List {
+                    ForEach(vm.pastJournies) { journey in
+                        JourneyRowView(journey: journey, action: {
+                            vm.viewMemory(journey)
+                        })
+                        .listRowBackground(Color.white)
+                        .padding(.vertical, 8)
+                    }
+                }
+                .listStyle(PlainListStyle())
+                .scrollContentBackground(.hidden)
+                .background(Color.white)
+                .cornerRadius(20)
+            }
         }
         .onboardingCard()
+    }
+}
+
+// MARK: - Custom Subview: JourneyRowView
+struct JourneyRowView: View {
+    var journey: FlightRecord
+    var action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 15) {
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(journey.route)
+                        .font(.headline)
+                        .foregroundColor(.black)
+                    Text("\(journey.date) • \(journey.flightNumber)")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    Text("Terminal \(journey.terminal)")
+                        .font(.caption2)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(Color.blue.opacity(0.1))
+                        .cornerRadius(4)
+                        .foregroundColor(.blue)
+                }
+                
+                Spacer()
+                
+                // Placeholder for memory thumbnail
+                Rectangle()
+                    .fill(Color(white: 0.98))
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(8)
+                    .overlay(
+                        Image(systemName: "photo")
+                            .font(.caption2)
+                            .foregroundColor(.gray)
+                    )
+            }
+        }
+    }
+}
+
+struct EntryFieldConfig: Identifiable {
+    let id = UUID()
+    let label: String
+    let text: Binding<String>
+}
+
+// MARK: - Custom Subview: ManualFlightEntryView
+struct ManualFlightEntryView: View {
+    @Bindable var vm: AirguideViewModel
+    var onSave: () -> Void
+    
+    @State private var route = ""
+    @State private var date = ""
+    @State private var flightNumber = ""
+    @State private var terminal = ""
+    @State private var notes = ""
+    
+    private var fields: [EntryFieldConfig] {
+        [
+            EntryFieldConfig(label: "Route (ex. ICN -> YYZ)", text: $route),
+            EntryFieldConfig(label: "Date (ex. June 5, 2026)", text: $date),
+            EntryFieldConfig(label: "Flight Number", text: $flightNumber),
+            EntryFieldConfig(label: "Terminal", text: $terminal)
+        ]
+    }
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                Text("Enter Flight Details")
+                    .font(.headline)
+                    .foregroundColor(.black)
+                
+                ForEach(fields) { field in
+                    EntryField(label: field.label, text: field.text)
+                }
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Memories & Notes")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .fontWeight(.bold)
+                    
+                    TextEditor(text: $notes)
+                        .frame(height: 100)
+                        .padding(10)
+                        .background(Color(white: 0.98))
+                        .cornerRadius(12)
+                        .foregroundColor(.black)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(Color.blue.opacity(0.1), lineWidth: 1)
+                        )
+                }
+                
+                Button(action: {
+                    vm.manuallyAddMemory(
+                        route: route.isEmpty ? "Unknown Route" : route,
+                        date: date.isEmpty ? "Today" : date,
+                        flightNumber: flightNumber.isEmpty ? "Manual" : flightNumber,
+                        terminal: terminal.isEmpty ? "1" : terminal,
+                        notes: notes
+                    )
+                    onSave()
+                }) {
+                    Text("Log this Journey")
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(15)
+                }
+                .padding(.top, 10)
+            }
+        }
+    }
+}
+
+struct EntryField: View {
+    var label: String
+    @Binding var text: String
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(label)
+                .font(.caption)
+                .foregroundColor(.gray)
+            TextField("", text: $text)
+                .padding(.bottom, 5)
+                .foregroundColor(.black)
+                .overlay(Rectangle().frame(height: 1).foregroundColor(.blue.opacity(0.3)), alignment: .bottom)
+        }
     }
 }
 

@@ -28,6 +28,22 @@ class AirguideViewModel {
     var currentFlightStatus: String = "On Time"
     var currentFlightNotes: String = "" // For logging memories
     
+    // MARK: - Computed properties
+    var flightDetails: [FlightDetailItem] {
+        var items: [FlightDetailItem] = []
+        
+        items.append(FlightDetailItem(label: "Flight Number", value: flightNumber.isEmpty ? "OZ4847" : flightNumber))
+        items.append(FlightDetailItem(label: "Date", value: "June 11, 2026"))
+        items.append(FlightDetailItem(label: "Route", value: "Incheon (ICN) -> Toronto (YYZ)"))
+        items.append(FlightDetailItem(label: "Departure", value: "10:30 AM"))
+        items.append(FlightDetailItem(label: "Terminal", value: "1"))
+        items.append(FlightDetailItem(label: "Gate", value: "22"))
+        items.append(FlightDetailItem(label: "Seat", value: "14A"))
+        items.append(FlightDetailItem(label: "Delayed Status", value: currentFlightStatus, color: currentFlightStatus == "On Time" ? .green : .red))
+        
+        return items
+    }
+    
     // Dynamic Data
     var pastJournies: [FlightRecord] = []
     var busList: [BusInfo] = []
@@ -105,6 +121,18 @@ class AirguideViewModel {
         
         // Reset notes for the next trip
         currentFlightNotes = ""
+    }
+    
+    func manuallyAddMemory(route: String, date: String, flightNumber: String, terminal: String, notes: String) {
+        let newRecord = FlightRecord(
+            route: route,
+            date: date,
+            flightNumber: flightNumber,
+            terminal: terminal,
+            status: "On Time",
+            notes: notes
+        )
+        pastJournies.insert(newRecord, at: 0)
     }
     
     func resetFlightEntry() {

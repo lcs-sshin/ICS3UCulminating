@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 // MARK: - FlightRecord Model
 struct FlightRecord: Identifiable {
@@ -18,4 +19,12 @@ struct BusInfo: Identifiable {
     var destination: String
     var busNumbers: [String]
     var arrivalTimes: [Int]
+}
+
+// MARK: - Helper for Array-driven UI
+struct FlightDetailItem: Identifiable {
+    var id: UUID = UUID()
+    var label: String
+    var value: String
+    var color: Color = .black
 }

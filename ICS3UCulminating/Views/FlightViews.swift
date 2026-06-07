@@ -187,15 +187,10 @@ struct FlightInfoView: View {
                 .fontWeight(.bold)
                 .foregroundColor(.black)
             
-            Group {
-                InfoDetailRow(label: "Flight Number", value: vm.flightNumber.isEmpty ? "OZ4847" : vm.flightNumber)
-                InfoDetailRow(label: "Date", value: "June 11, 2026")
-                InfoDetailRow(label: "Route", value: "Incheon (ICN) -> Toronto (YYZ)")
-                InfoDetailRow(label: "Departure", value: "10:30 AM")
-                InfoDetailRow(label: "Terminal", value: "1")
-                InfoDetailRow(label: "Gate", value: "22")
-                InfoDetailRow(label: "Seat", value: "14A")
-                InfoDetailRow(label: "Delayed Status", value: vm.currentFlightStatus, color: vm.currentFlightStatus == "On Time" ? .green : .red)
+            VStack(alignment: .leading, spacing: 20) {
+                ForEach(vm.flightDetails) { item in
+                    InfoDetailRow(label: item.label, value: item.value, color: item.color)
+                }
             }
             
             Spacer()

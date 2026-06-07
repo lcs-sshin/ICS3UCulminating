@@ -43,27 +43,23 @@ struct AirguideMainView: View {
                 .padding()
                 .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
                 .animation(.spring(), value: vm.currentStep)
-                
-                // UNIVERSAL HOME BUTTON (Outer Layer - Minimalist)
+            }
+            .overlay(alignment: .topTrailing) {
+                // UNIVERSAL HOME BUTTON (Surgical Hit-Area)
                 if vm.currentStep != .intro {
-                    VStack {
-                        HStack {
-                            Spacer()
-                            Button(action: {
-                                withAnimation {
-                                    vm.currentStep = .intro
-                                }
-                            }) {
-                                Image(systemName: "house.fill")
-                                    .font(.title3)
-                                    .foregroundColor(Color(white: 0.3)) // Dark Gray
-                                    .padding(15)
-                            }
-                            .padding(.top, 10)
-                            .padding(.trailing, 10)
+                    Button(action: {
+                        withAnimation {
+                            vm.currentStep = .intro
                         }
-                        Spacer()
+                    }) {
+                        Image(systemName: "house.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(Color(white: 0.3)) // Dark Gray
+                            .padding(10)
+                            .contentShape(Rectangle()) // Limits hit area strictly to the button
                     }
+                    .padding(.top, 10)
+                    .padding(.trailing, 10)
                 }
             }
         }
